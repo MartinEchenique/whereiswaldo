@@ -5,7 +5,7 @@ admin.initializeApp();
 const db = admin.firestore();
 exports.checkPersonage = functions.https.onCall(async (data, context) => {
   const docRef = db.collection('coord').where('name', '==', data.name);
-  let res;
+  let res = {};
   try {
     const snap = await docRef.get();
     let doc = snap.docs[0];
@@ -33,15 +33,15 @@ exports.checkPersonage = functions.https.onCall(async (data, context) => {
           },
           { merge: true },
         );
-        const seconds = await getTime(data.id);
-        console.log(seconds);
+        res.miliseconds = await getTime(data.id);
+        res.isTopTen = await isTopTen(res.miliseconds);
       }
-      res = { data: true };
+      res.data = true;
     } else {
-      res = { data: false };
+      res.data = false;
     }
   } catch (err) {
-    res = { data: 'Error getting document' + err };
+    res.data = 'Error getting document' + err;
   }
   return res;
 });
@@ -60,6 +60,21 @@ exports.newMatch = functions.https.onCall(async (data, context) => {
   }
   const newMatch = await db.collection('matchs').add({ personages, start });
   return newMatch.id;
+});
+
+exports.addToTimesTable = functions.https.onCall(async (data, context) => {
+  const name = data.name;
+  const time = await getTime(data.id);
+  const topTen = await isTopTen(time);
+  if (topTen) {
+    await db.collection('matchsTable').doc(data.id).set({ name, time });
+  }
+  const topTenTable = await getTopTen();
+  return topTenTable;
+});
+exports.getTopTenTable = functions.https.onCall(async (data, context) => {
+  const topTen = await getTopTen();
+  return topTen;
 });
 
 async function checkWin(id) {
@@ -81,20 +96,22 @@ async function getTime(id) {
   const start = doc.data().start.toMillis();
   const end = doc.data().end.toMillis();
   const millis = end - start;
-  const string =
-    'seconds: ' +
-    Math.floor(millis / 1000) +
-    ' - miliseconds: ' +
-    Math.floor(millis % 1000);
+
   return millis;
 }
 
-exports.addToTimesTable = functions.https.onCall(async (data, context) => {
-  const name = data.name;
-  const time = await getTime(data.id);
-  const newMatch = await db
-    .collection('matchsTable')
-    .doc(data.id)
-    .set({ name, time });
-  return time;
-});
+async function isTopTen(time) {
+  const topTen = await getTopTen();
+  if (!topTen[9] || time < topTen[9].time) {
+    return true;
+  }
+  return false;
+}
+async function getTopTen() {
+  const topTenref = db.collection('matchsTable').orderBy('time').limit(10);
+  const topTen = await topTenref.get();
+  const list = topTen.docs.map((doc) => {
+    return { time: doc.data().time, name: doc.data().name };
+  });
+  return list;
+}

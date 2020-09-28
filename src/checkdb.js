@@ -6,7 +6,7 @@ async function checkForFound(name, coordinates, id) {
     coordinates,
     id,
   }).then((response) => {
-    isFound = response.data;
+    isFound = response;
   });
   return isFound.data;
 }

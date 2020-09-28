@@ -1,4 +1,5 @@
 import { checkForFound } from './checkdb';
+import { handleGameOver } from './helperFunctions';
 
 class GameImg {
   constructor(src, id, personages = {}) {
@@ -37,18 +38,26 @@ class GameImg {
         document.getElementsByClassName('toFindImg')[0].dataset.name
       ].selectImg.setAsSelected();
     let selected = document.getElementsByClassName('selected')[0].dataset.name;
-    this.personages[selected].setCoordinates(y, x);
-    this.handleFound(selected, x, y);
+    const personageSelected = this.personages[selected];
+    if (personageSelected.canMoveTag()) {
+      personageSelected.setCoordinates(y, x);
+      this.handleFound(selected, x, y);
+    }
   }
 
   async handleFound(selected, x, y) {
+    const personageSelected = this.personages[selected];
+
     let isFound = await checkForFound(selected, [x, y], this.matchId);
-    if (isFound) {
-      this.personages[selected].setAsFound();
+    console.log(isFound.data);
+    if (isFound.data) {
+      personageSelected.setAsFound();
       this.defineSelect();
       if (this.checkForWin()) {
-        document.getElementById('timeFormFrame').style.display = 'flex';
+        handleGameOver(isFound.isTopTen);
       }
+    } else {
+      personageSelected.notFound();
     }
   }
   defineSelect() {
