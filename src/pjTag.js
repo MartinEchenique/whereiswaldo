@@ -1,7 +1,7 @@
 class Tag {
-  constructor(src) {
+  constructor(i, gameName) {
     this.borderElement = this.createBorderElement();
-    this.domElement = this.createDomElement(src);
+    this.domElement = this.createDomElement(i, gameName);
     this.visible = false;
   }
   setTop(top, visible = true) {
@@ -42,11 +42,12 @@ class Tag {
       !this.borderElement.classList.contains('loader')
     );
   }
-  createDomElement(src) {
+  createDomElement(i, gameName) {
     let container = document.getElementById('tagged-image');
     let domElement = document.createElement('img');
     domElement.style.position = 'absolute';
-    domElement.src = src;
+    domElement.src = `../src/themes/${gameName}/character_${i}.png`;
+    domElement.dataset.index = i;
     domElement.style.display = 'none';
 
     domElement.classList.add('tag-img');

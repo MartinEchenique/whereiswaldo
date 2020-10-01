@@ -1,15 +1,15 @@
-async function handleGameOver(isTopTen) {
+async function handleGameOver(isTopTen, gameName) {
   if (isTopTen) {
     document.getElementById('timeFormFrame').style.display = 'flex';
   } else {
-    let topTen = await getTopTenTable();
+    let topTen = await getTopTenTable(gameName);
     populateTable(topTen);
     document.getElementById('topTenDiv').style.display = 'flex';
   }
 }
-async function getTopTenTable() {
+async function getTopTenTable(gameNAme) {
   const getTopTenTable = fbFunctions.httpsCallable('getTopTenTable');
-  const topTenTable = await getTopTenTable();
+  const topTenTable = await getTopTenTable({ gameName });
   return topTenTable.data;
 }
 
@@ -28,4 +28,13 @@ function populateTable(table) {
   });
 }
 
-export { handleGameOver, getTopTenTable, populateTable };
+function showError(err) {
+  const errorDiv = document.getElementById('errorMessage');
+  errorDiv.textContent = err;
+  errorDiv.style.display = 'block';
+  setTimeout(() => {
+    errorDiv.textContent = '';
+    errorDiv.style.display = 'none';
+  }, 3000);
+}
+export { handleGameOver, populateTable, showError };

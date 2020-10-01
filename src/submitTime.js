@@ -1,4 +1,4 @@
-import { getTopTenTable, populateTable } from './helperFunctions';
+import { populateTable } from './helperFunctions';
 
 function handleSubmit(matchId) {
   document.getElementById('timeGame').addEventListener('submit', async (e) => {
@@ -14,9 +14,3 @@ function handleSubmit(matchId) {
 }
 
 export { handleSubmit };
-
-// const string =
-// 'seconds: ' +
-// Math.floor(millis / 1000) +
-// ' - miliseconds: ' +
-// Math.floor(millis % 1000);

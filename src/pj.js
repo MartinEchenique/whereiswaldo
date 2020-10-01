@@ -1,13 +1,14 @@
 import { Tag } from './pjTag.js';
 import { SelectPj } from './pjSelect.js';
+//`../src/${gameName}/character_${i}.png`
 class Pj {
-  constructor(name, img) {
-    this.name = name;
-    this.img = img;
+  constructor(i, gameName) {
+    this.name = `character_${i}`;
+    this.img = `../src/${gameName}/character_${i}.png`;
     this.found = false;
     this.coordinates = [null, null];
-    this.tag = new Tag(img);
-    this.selectImg = new SelectPj(img, name);
+    this.tag = new Tag(i, gameName);
+    this.selectImg = new SelectPj(i, gameName);
   }
   setCoordinates(x, y) {
     const canSetPlace = this.tag.canMove();

@@ -1,7 +1,7 @@
 class SelectPj {
-  constructor(src, name, left = null, top = null) {
+  constructor(i, gameName, left = null, top = null) {
     this.setAsSelected = this.setAsSelected.bind(this);
-    this.domElement = this.createDomElement(name, src);
+    this.domElement = this.createDomElement(i, gameName);
   }
   setAsSelected() {
     let previusSelected = document.getElementsByClassName('selected')[0];
@@ -9,12 +9,12 @@ class SelectPj {
     this.domElement.classList.add('selected');
   }
 
-  createDomElement(name, src) {
+  createDomElement(i, gameName) {
     let container = document.getElementById('faces-container');
     let domElement = document.createElement('img');
-    domElement.src = src;
+    domElement.src = `../src/themes/${gameName}/character_${i}.png`;
     domElement.classList.add('toFindImg');
-    domElement.dataset.name = name;
+    domElement.dataset.index = i;
     domElement.addEventListener('click', this.setAsSelected);
     container.appendChild(domElement);
     return domElement;
