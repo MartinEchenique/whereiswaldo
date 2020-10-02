@@ -7,7 +7,7 @@ async function handleGameOver(isTopTen, gameName) {
     document.getElementById('topTenDiv').style.display = 'flex';
   }
 }
-async function getTopTenTable(gameNAme) {
+async function getTopTenTable(gameName) {
   const getTopTenTable = fbFunctions.httpsCallable('getTopTenTable');
   const topTenTable = await getTopTenTable({ gameName });
   return topTenTable.data;
