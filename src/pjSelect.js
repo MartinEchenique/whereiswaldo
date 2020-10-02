@@ -12,7 +12,7 @@ class SelectPj {
   createDomElement(i, gameName) {
     let container = document.getElementById('faces-container');
     let domElement = document.createElement('img');
-    domElement.src = `../src/themes/${gameName}/character_${i}.png`;
+    domElement.src = `./themes/${gameName}/character_${i}.png`;
     domElement.classList.add('toFindImg');
     domElement.dataset.index = i;
     domElement.addEventListener('click', this.setAsSelected);

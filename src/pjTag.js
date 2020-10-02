@@ -46,7 +46,7 @@ class Tag {
     let container = document.getElementById('tagged-image');
     let domElement = document.createElement('img');
     domElement.style.position = 'absolute';
-    domElement.src = `../src/themes/${gameName}/character_${i}.png`;
+    domElement.src = `./themes/${gameName}/character_${i}.png`;
     domElement.dataset.index = i;
     domElement.style.display = 'none';
 

@@ -12,7 +12,7 @@ class GameImg {
   createDomElement(gameName) {
     let container = document.getElementById('tagged-image');
     let domElement = document.createElement('img');
-    domElement.src = `../src/themes/${gameName}/main.png`;
+    domElement.src = `./themes/${gameName}/main.png`;
     domElement.draggable = 'false';
     domElement.setAttribute('id', 'mainImage');
     domElement.addEventListener('click', (e) => {
